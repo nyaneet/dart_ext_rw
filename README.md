@@ -1,6 +1,6 @@
 # Dart API Client
 
-Several simple tools to make an API request to the API Server
+Several simple tools to make an API request to the [API Server](https://github.com/a-givertzman/api-server)
 
 ## How to use
 
