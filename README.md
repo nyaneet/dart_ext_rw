@@ -1,39 +1,36 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Dart API Client
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+Several simple tools to make an API request to the API Server
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+## How to use
 
 ```dart
-const like = 'sample';
+  Future<Result<List<String>>> all() {
+    if (_sqlQuery.valid()) {
+      final apiRequest = ApiRequest(
+        address: _address, 
+        sqlQuery: _sqlQuery,
+      );
+      return apiRequest.fetch().then((result) {
+        _log.fine('.all | result: $result');
+        return result.fold(
+          onData: (apiReply) {
+            final data = apiReply.data.map((row) {
+              _log.fine('.all | row: $row');
+              return row['name'].toString();
+            });
+            return Result(data: data.toList());
+          }, 
+          onError: (error) {
+            return Result(error: error);
+          },
+        );
+      });
+    }
+    return Future.delayed(const Duration(milliseconds: 100)).then((_) {
+      return Result(
+        error: Failure(message: '[DepObjects.all] error: SQL query is empty', stackTrace: StackTrace.current),
+      );
+    });
+  }  
 ```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
