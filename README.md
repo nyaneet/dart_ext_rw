@@ -42,7 +42,7 @@ class Books {
     }
     return Future.value(
       Result(
-        error: Failure(message: '[DepObjects.all] error: SQL query is empty', stackTrace: StackTrace.current),
+        error: Failure(message: '[Books.all] error: SQL query has errors or empty', stackTrace: StackTrace.current),
       ),
     );
   }  
