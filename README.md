@@ -19,7 +19,7 @@ class Books {
     _address = address,
     _sqlQuery = sqlQuery;
   ///
-  /// returns all stored D.. Objects
+  /// returns all stored Books
   Future<Result<List<String>>> all() {
     if (_sqlQuery.valid()) {
       final apiRequest = ApiRequest(
