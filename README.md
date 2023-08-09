@@ -4,7 +4,7 @@ Several simple tools to make an API request to the [API Server](https://github.c
 
 ## How to use
 
-- Create class Books responsible for data stored in the API
+- Create Books class responsible for data stored behaind the API
 
 ```dart
 /// The class responsible for some data named books stored in the API 
@@ -51,7 +51,7 @@ class Books {
 }
 ```
 
-- Use class Books
+- Use Books class
 
 ```dart
 final books = Books(
