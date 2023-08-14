@@ -22,7 +22,7 @@ class ExecutableQuery implements ApiQueryType {
   @override
   bool valid() {
     return true;
-    /// some simplest validation to be implemented
+    /// TODO some simplest validation to be implemented
   }
   ///
   @override
