@@ -9,7 +9,7 @@ class ExecutableQuery implements ApiQueryType {
   final String _script;
   final Map<String, dynamic> _params;
   ///
-  /// Prapares sql for some database
+  /// Prapares query for some executable
   ExecutableQuery({
     required String authToken,
     required String script,
@@ -22,7 +22,7 @@ class ExecutableQuery implements ApiQueryType {
   @override
   bool valid() {
     return true;
-    /// some simplest sql syntax validation to be implemented
+    /// some simplest validation to be implemented
   }
   ///
   @override

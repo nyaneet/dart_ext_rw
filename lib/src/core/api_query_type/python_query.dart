@@ -9,7 +9,7 @@ class PythonQuery implements ApiQueryType {
   final String _script;
   final Map<String, dynamic> _params;
   ///
-  /// Prapares sql for some database
+  /// Prapares query for some python script
   PythonQuery({
     required String authToken,
     required String script,
@@ -22,7 +22,7 @@ class PythonQuery implements ApiQueryType {
   @override
   bool valid() {
     return true;
-    /// some simplest sql syntax validation to be implemented
+    /// TODO some simplest validation to be implemented
   }
   ///
   @override
