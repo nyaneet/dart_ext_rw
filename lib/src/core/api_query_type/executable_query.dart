@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:dart_api_client/src/core/api_query_type/api_query_type.dart';
 import 'package:uuid/uuid.dart';
 
-class PythonQuery implements ApiQueryType {
+class ExecutableQuery implements ApiQueryType {
   final String _authToken;
   late String _id;
   final String _script;
   final Map<String, dynamic> _params;
   ///
   /// Prapares sql for some database
-  PythonQuery({
+  ExecutableQuery({
     required String authToken,
     required String script,
     required Map<String, dynamic> params,
@@ -31,7 +31,7 @@ class PythonQuery implements ApiQueryType {
     final jsonString = json.encode({
       'auth_token': _authToken,
       'id': _id,
-      'python': {
+      'executable': {
         'script': _script,
         'params': _params,
       },
