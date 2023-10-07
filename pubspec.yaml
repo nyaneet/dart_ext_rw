@@ -18,7 +18,7 @@ dependencies:
       git:
         url: https://github.com/a-givertzman/hmi_core.git
         ref: master # branch name
-  logging: ^1.2.0
+  logging: ^1.1.1
   uuid: ^3.0.7
 
 dev_dependencies:
