@@ -7,6 +7,8 @@ class PythonQuery implements ApiQueryType {
   final String _authToken;
   late String _id;
   final String _script;
+  final bool _keepAlive;
+  final bool _debug;
   final Map<String, dynamic> _params;
   ///
   /// Prapares query for some python script
@@ -14,11 +16,15 @@ class PythonQuery implements ApiQueryType {
     required String authToken,
     required String script,
     required Map<String, dynamic> params,
+    bool keepAlive = false,
+    bool debug = false,
   }) :
     _authToken = authToken,
     _script = script,
-    _params = params;
-  ///
+    _params = params,
+    _keepAlive = keepAlive,
+    _debug = debug;
+///
   @override
   bool valid() {
     return true;
@@ -31,6 +37,8 @@ class PythonQuery implements ApiQueryType {
     final jsonString = json.encode({
       'auth_token': _authToken,
       'id': _id,
+      'keep-alive': _keepAlive,
+      'debug': _debug,
       'python': {
         'script': _script,
         'params': _params,

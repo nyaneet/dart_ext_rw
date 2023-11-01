@@ -8,16 +8,22 @@ class SqlQuery implements ApiQueryType {
   late String _id;
   final String _database;
   final String _sql;
+  final bool _keepAlive;
+  final bool _debug;
   ///
   /// Prapares sql for some database
   SqlQuery({
     required String authToken,
     required String database,
     required String sql,
+    bool keepAlive = false,
+    bool debug = false,
   }) :
     _authToken = authToken,
     _database = database,
-    _sql = sql;
+    _sql = sql,
+    _keepAlive = keepAlive,
+    _debug = debug;
   ///
   @override
   bool valid() {
@@ -31,6 +37,8 @@ class SqlQuery implements ApiQueryType {
     final jsonString = json.encode({
       'auth_token': _authToken,
       'id': _id,
+      'keep-alive': _keepAlive,
+      'debug': _debug,
       'sql': {
         'database': _database,
         'sql': _sql,
