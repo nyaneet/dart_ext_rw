@@ -7,14 +7,14 @@ class ApiReply {
   final _log = Logger('ApiReply');
   late final String _authToken;
   late final String _id;
-  late final Map<String, dynamic> _query;
+  late final String _query;
   late final List<Map<String, dynamic>> _data;
   late final ApiError _error;
   ///
   ApiReply({
     required String authToken,
     required String id,
-    required Map<String, dynamic> query,
+    required String query,
     required List<Map<String, dynamic>> data,
     required ApiError errors,
   }) : 
@@ -41,7 +41,7 @@ class ApiReply {
   ///
   String get id => _id;
   ///
-  Map<String, dynamic> get sql => _query;
+  String get sql => _query;
   ///
   List<Map<String, dynamic>> get data => _data;
   ///

@@ -19,6 +19,7 @@ dependencies:
         url: https://github.com/a-givertzman/hmi_core.git
         ref: master # branch name
   uuid: ^3.0.7
+  web_socket_channel: ^2.4.0
 
 dev_dependencies:
   flutter_test:
