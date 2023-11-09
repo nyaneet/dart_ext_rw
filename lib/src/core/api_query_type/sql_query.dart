@@ -35,9 +35,9 @@ class SqlQuery implements ApiQueryType {
   String buildJson() {
     _id = const Uuid().v1();
     final jsonString = json.encode({
-      'auth_token': _authToken,
+      'authToken': _authToken,
       'id': _id,
-      'keep-alive': _keepAlive,
+      'keepAlive': _keepAlive,
       'debug': _debug,
       'sql': {
         'database': _database,
