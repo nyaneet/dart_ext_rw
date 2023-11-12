@@ -28,7 +28,7 @@ class ApiReply {
     // _log.fine('.fromJson | jsonString: $jsonString');
     final jsonMap = json.decode(jsonString);
     _log.fine('.fromJson | jsonMap: $jsonMap');
-    _authToken = jsonMap['auth_token'];
+    _authToken = jsonMap['authToken'];
     _id = jsonMap['id'];
     _query = jsonMap['query'] ?? {};
     _data = (jsonMap['data'] as List<dynamic>).map((e) {
