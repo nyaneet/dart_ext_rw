@@ -1,8 +1,8 @@
 library dart_api_clientcore;
 
-export 'src/core/api_query_type/api_query_type.dart';
-export 'src/core/api_query_type/sql_query.dart';
-export 'src/core/api_query_type/python_query.dart';
-export 'src/core/entities/api_address.dart';
-export 'src/reply/api_reply.dart';
-export 'src/request/api_request.dart';
+export 'src/api_client/address/api_address.dart';
+export 'src/api_client/query/api_query_type.dart';
+export 'src/api_client/query/sql_query.dart';
+export 'src/api_client/query/python_query.dart';
+export 'src/api_client/reply/api_reply.dart';
+export 'src/api_client/request/api_request.dart';

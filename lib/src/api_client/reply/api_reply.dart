@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dart_api_client/src/reply/api_error.dart';
+import 'package:dart_api_client/src/api_client/reply/api_error.dart';
 import 'package:logging/logging.dart';
 
 class ApiReply {
