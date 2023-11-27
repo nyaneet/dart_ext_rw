@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dart_api_client/src/core/api_query_type/api_query_type.dart';
+import 'package:dart_api_client/src/api_client/query/api_query_type.dart';
 import 'package:uuid/uuid.dart';
 
 class SqlQuery implements ApiQueryType {

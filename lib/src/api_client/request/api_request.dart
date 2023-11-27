@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dart_api_client/src/core/api_query_type/api_query_type.dart';
-import 'package:dart_api_client/src/core/entities/api_address.dart';
-import 'package:dart_api_client/src/reply/api_reply.dart';
+import 'package:dart_api_client/src/api_client/query/api_query_type.dart';
+import 'package:dart_api_client/src/api_client/address/api_address.dart';
+import 'package:dart_api_client/src/api_client/reply/api_reply.dart';
 import 'package:hmi_core/hmi_core_failure.dart';
 import 'package:hmi_core/hmi_core_log.dart';
 import 'package:hmi_core/hmi_core_result.dart';
