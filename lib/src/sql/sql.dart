@@ -6,7 +6,7 @@ import 'package:dart_api_client/src/table_schema/schema_entry.dart';
 class Sql {
   ///
   final String _sql;
-  List<SchemaEntry> _enties;
+  final List<SchemaEntry> _enties;
   ///
   Sql({
     required String sql,

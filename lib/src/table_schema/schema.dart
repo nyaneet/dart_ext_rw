@@ -126,13 +126,14 @@ class Schema<T extends SchemaEntry> {
       ),
     );
     return request.fetch().then((result) {
-      return result.fold(
-        onData: (replay) {
-          if (replay.hasError) {
-            return Err(Failure(message: replay.error.message, stackTrace: StackTrace.current));
+      return switch (result) {
+        Ok(:final value) => () {
+          final reply = value;
+          if (reply.hasError) {
+            return Err<List<T>, Failure>(Failure(message: reply.error.message, stackTrace: StackTrace.current));
           } else {
             _entries.clear();
-            final rows = replay.data;
+            final rows = reply.data;
             for (final row in rows) {
               final entry = _makeEntry(row);
               if (_entries.containsKey(entry.key)) {
@@ -144,12 +145,10 @@ class Schema<T extends SchemaEntry> {
               _entries[entry.key] = entry;
             }
           }
-          return Ok(_entries.values.toList());
-        }, 
-        onError: (err) {
-          return Err(err);
-        },
-      );
+          return Ok<List<T>, Failure>(_entries.values.toList());
+        }(), 
+        Err(:final error) => Err<List<T>, Failure>(error),
+      };
     });
   }
   ///
