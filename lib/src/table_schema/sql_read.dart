@@ -1,10 +1,9 @@
 import 'package:ext_rw/ext_rw.dart';
-import 'package:ext_rw/src/table_schema/schema_read.dart';
 import 'package:hmi_core/hmi_core_failure.dart';
 // import 'package:hmi_core/hmi_core_log.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
 
-class SqlRead<T extends SchemaEntry, P> implements SchemaRead {
+class SqlRead<T extends SchemaEntry, P> implements SchemaRead<T, P> {
   // late final Log _log;
   final ApiAddress _address;
   final String _authToken;
