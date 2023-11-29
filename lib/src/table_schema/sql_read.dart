@@ -12,6 +12,8 @@ class SqlRead<T extends SchemaEntry> implements SchemaRead {
   final bool _keepAlive;
   final bool _debug;
   final Sql Function(List<dynamic>? values) _fetchSqlBuilder;
+  final Map<String, T> _entries = {};
+  Sql _sql = Sql(sql: '');
   ///
   ///
   SqlRead({
@@ -34,13 +36,58 @@ class SqlRead<T extends SchemaEntry> implements SchemaRead {
   ///
   @override
   Future<Result<List<T>, Failure>> fetch(params) {
-    await fetchRelations();
-    _sql = _fetchSqlBuilder(values);
+    _sql = _fetchSqlBuilder(params);
     return _fetchWith(_sql);
   }
   ///
+  /// Fetchs data with new [sql]
+  Future<Result<List<T>, Failure>> _fetchWith(Sql sql) {
+    final request = ApiRequest(
+      address: _address, 
+      query: SqlQuery(
+        authToken: _authToken, 
+        database: _database,
+        sql: sql.build(),
+        keepAlive: _keepAlive,
+        debug: _debug,
+      ),
+    );
+    return request.fetch().then((result) {
+      return switch (result) {
+        Ok(:final value) => () {
+          final reply = value;
+          if (reply.hasError) {
+            return Err<List<T>, Failure>(Failure(message: reply.error.message, stackTrace: StackTrace.current));
+          } else {
+            _entries.clear();
+            final rows = reply.data;
+            for (final row in rows) {
+              final entry = _makeEntry(row);
+              if (_entries.containsKey(entry.key)) {
+                throw Failure(
+                  message: "$runtimeType.fetchWith | dublicated entry key: ${entry.key}", 
+                  stackTrace: StackTrace.current,
+                );
+              }
+              _entries[entry.key] = entry;
+            }
+          }
+          return Ok<List<T>, Failure>(_entries.values.toList());
+        }(), 
+        Err(:final error) => Err<List<T>, Failure>(error),
+      };
+    });
+  }
   ///
-  Future<Result<List<T>, Failure>> fetch(params) {
-
+  ///
+  T _makeEntry(Map<String, dynamic> row) {
+    final constructor = _entryFromFactories[T];
+    if (constructor != null) {
+      return constructor(row);
+    }
+    throw Failure(
+      message: "$runtimeType._makeEntry | Can't find constructor for $T", 
+      stackTrace: StackTrace.current,
+    );
   }
 }
