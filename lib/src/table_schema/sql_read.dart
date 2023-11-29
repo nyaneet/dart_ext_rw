@@ -1,11 +1,11 @@
 import 'package:ext_rw/ext_rw.dart';
 import 'package:ext_rw/src/table_schema/schema_read.dart';
 import 'package:hmi_core/hmi_core_failure.dart';
-import 'package:hmi_core/hmi_core_log.dart';
+// import 'package:hmi_core/hmi_core_log.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
 
 class SqlRead<T extends SchemaEntry, P> implements SchemaRead {
-  late final Log _log;
+  // late final Log _log;
   final ApiAddress _address;
   final String _authToken;
   final String _database;
@@ -31,9 +31,9 @@ class SqlRead<T extends SchemaEntry, P> implements SchemaRead {
     _keepAlive = keepAlive,
     _debug = debug,
     _sqlBuilder = sqlBuilder,
-    _entryFromFactories = entryFromFactories {
-    _log = Log("$runtimeType");
-  }
+    _entryFromFactories = entryFromFactories; // {
+  //   _log = Log("$runtimeType");
+  // }
   //
   //
   @override

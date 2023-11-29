@@ -14,7 +14,7 @@ typedef SqlBuilder<T extends SchemaEntry> = Sql Function(Sql sql, T entry);
 class Schema<T extends SchemaEntry> {
   late final Log _log;
   final List<Field> _fields;
-  Map<String, T> _entries = {};
+  final Map<String, T> _entries = {};
   final SchemaRead<T, dynamic>? _read;
   final SchemaWrite<T>? _write;
   final Map<String, Schema> _relations;
