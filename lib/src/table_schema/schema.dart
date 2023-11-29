@@ -65,7 +65,7 @@ class Schema<T extends SchemaEntry> {
     }
     return Future.value(
       Err<List<T>, Failure>(Failure(
-        message: "$runtimeType.relation | read - not initialized", 
+        message: "$runtimeType.fetch | read - not initialized", 
         stackTrace: StackTrace.current,
       )),
     );
@@ -92,7 +92,7 @@ class Schema<T extends SchemaEntry> {
     }
     return Future.value(
       Err<List<T>, Failure>(Failure(
-        message: "$runtimeType.relation | write - not initialized", 
+        message: "$runtimeType.insert | write - not initialized", 
         stackTrace: StackTrace.current,
       )),
     );
@@ -106,7 +106,7 @@ class Schema<T extends SchemaEntry> {
     }
     return Future.value(
       Err<List<T>, Failure>(Failure(
-        message: "$runtimeType.relation | write - not initialized", 
+        message: "$runtimeType.update | write - not initialized", 
         stackTrace: StackTrace.current,
       )),
     );
@@ -120,7 +120,7 @@ class Schema<T extends SchemaEntry> {
     }
     return Future.value(
       Err<List<T>, Failure>(Failure(
-        message: "$runtimeType.relation | write - not initialized", 
+        message: "$runtimeType.delete | write - not initialized", 
         stackTrace: StackTrace.current,
       )),
     );
