@@ -1,7 +1,6 @@
 import 'package:ext_rw/ext_rw.dart';
-import 'package:ext_rw/src/sql/sql.dart';
-import 'package:ext_rw/src/table_schema/field.dart';
-import 'package:ext_rw/src/table_schema/schema_entry.dart';
+import 'package:ext_rw/src/table_schema/schema_read.dart';
+import 'package:ext_rw/src/table_schema/schema_write.dart';
 import 'package:hmi_core/hmi_core_failure.dart';
 import 'package:hmi_core/hmi_core_log.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
@@ -14,16 +13,10 @@ typedef SqlBuilder<T extends SchemaEntry> = Sql Function(Sql sql, T entry);
 /// abstruction on the SQL table rows
 class Schema<T extends SchemaEntry> {
   late final Log _log;
-  final ApiAddress _address;
-  final String _authToken;
-  final String _database;
-  final bool _keepAlive;
-  final bool _debug;
   final List<Field> _fields;
   final Map<String, T> _entries = {};
-  final Sql Function(List<dynamic>? values) _fetchSqlBuilder;
-  final SqlBuilder<T>? _insertSqlBuilder;
-  final SqlBuilder<T>? _updateSqlBuilder;
+  final SchemaRead<T, dynamic>? _read;
+  final SchemaWrite<T>? _write;
   final Map<String, Schema> _relations;
   final Map<T, Function> _entryFromFactories;
   final Map<T, Function> _entryEmptyFactories;
@@ -33,28 +26,16 @@ class Schema<T extends SchemaEntry> {
   /// abstruction on the SQL table rows
   /// - [keys] - list of table field names
   Schema({
-    required ApiAddress address,
-    required String authToken,
-    required String database,
     required List<Field> fields,
-    bool keepAlive = false,
-    bool debug = false,
-    required Sql Function(List<dynamic>? values) fetchSqlBuilder,
-    SqlBuilder<T>? insertSqlBuilder,
-    SqlBuilder<T>? updateSqlBuilder,
+    SchemaRead<T, dynamic>? read,
+    SchemaWrite<T>? write,
     Map<String, Schema> relations = const {},
     required Map<T, Function> entryFromFactories,
     required Map<T, Function> entryEmptyFactories,
   }) :
-    _address = address,
-    _authToken = authToken,
-    _database = database,
     _fields = fields,
-    _keepAlive = keepAlive,
-    _debug = debug,
-    _fetchSqlBuilder = fetchSqlBuilder,
-    _insertSqlBuilder = insertSqlBuilder,
-    _updateSqlBuilder = updateSqlBuilder,
+    _read = read,
+    _write = write,
     _relations = relations,
     _entryFromFactories = entryFromFactories,
     _entryEmptyFactories = entryEmptyFactories {
@@ -75,18 +56,26 @@ class Schema<T extends SchemaEntry> {
   List<T> get entries => _entries.values.toList();
   ///
   /// Fetchs data with existing sql
-  Future<Result<List<SchemaEntry>, Failure>> refresh() {
-    if (_sql.build().isEmpty) {
-      _sql = _fetchSqlBuilder([]);
-  }
-    return fetchWith(_sql);
-  }
+  // Future<Result<List<SchemaEntry>, Failure>> refresh() {
+  //   if (_sql.build().isEmpty) {
+  //     _sql = _fetchSqlBuilder([]);
+  // }
+  //   return fetchWith(_sql);
+  // }
   ///
   /// Fetchs data with new sql built from [values] calling fetchSqlBuilder(values)
-  Future<Result<List<T>, Failure>> fetch(List values) async {
+  Future<Result<List<T>, Failure>> fetch(params) async {
     await fetchRelations();
-    _sql = _fetchSqlBuilder(values);
-    return fetchWith(_sql);
+    final read = _read;
+    if (read != null) {
+      return read.fetch(params);
+    }
+    return Future.value(
+      Err<List<T>, Failure>(Failure(
+        message: "$runtimeType.relation | read - not initialized", 
+        stackTrace: StackTrace.current,
+      )),
+    );
   }
   ///
   /// Returns relation Result<Scheme> if exists else Result<Failure>
