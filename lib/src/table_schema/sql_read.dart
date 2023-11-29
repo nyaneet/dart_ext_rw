@@ -4,14 +4,14 @@ import 'package:hmi_core/hmi_core_failure.dart';
 import 'package:hmi_core/hmi_core_log.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
 
-class SqlRead<T extends SchemaEntry> implements SchemaRead {
+class SqlRead<T extends SchemaEntry, P> implements SchemaRead {
   late final Log _log;
   final ApiAddress _address;
   final String _authToken;
   final String _database;
   final bool _keepAlive;
   final bool _debug;
-  final Sql Function(List<dynamic>? values) _sqlBuilder;
+  final Sql Function(P params) _sqlBuilder;
   final Map<T, Function> _entryFromFactories;
   Sql _sql = Sql(sql: '');
   ///
@@ -22,7 +22,7 @@ class SqlRead<T extends SchemaEntry> implements SchemaRead {
     required String database,
     bool keepAlive = false,
     bool debug = false,
-    required Sql Function(List<dynamic>? values) sqlBuilder,
+    required Sql Function(P params) sqlBuilder,
     required Map<T, Function> entryFromFactories,
   }) :
     _address = address,
@@ -39,11 +39,11 @@ class SqlRead<T extends SchemaEntry> implements SchemaRead {
   @override
   Future<Result<List<T>, Failure>> fetch(params) {
     _sql = _sqlBuilder(params);
-    return _fetchWith(_sql);
+    return _fetch(_sql);
   }
   ///
   /// Fetchs data with new [sql]
-  Future<Result<List<T>, Failure>> _fetchWith(Sql sql) {
+  Future<Result<List<T>, Failure>> _fetch(Sql sql) {
     final request = ApiRequest(
       address: _address, 
       query: SqlQuery(
