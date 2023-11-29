@@ -11,11 +11,11 @@ typedef SqlBuilder<T extends SchemaEntry> = Sql Function(Sql sql, T entry);
 ///
 /// A collection of the SchameEntry, 
 /// abstruction on the SQL table rows
-class Schema<T extends SchemaEntry> {
+class Schema<T extends SchemaEntry, P> {
   late final Log _log;
   final List<Field> _fields;
   final Map<String, T> _entries = {};
-  final SchemaRead<T, dynamic>? _read;
+  final SchemaRead<T, P>? _read;
   final SchemaWrite<T>? _write;
   final Map<String, Schema> _relations;
   ///
@@ -24,7 +24,7 @@ class Schema<T extends SchemaEntry> {
   /// - [keys] - list of table field names
   Schema({
     required List<Field> fields,
-    SchemaRead<T, dynamic>? read,
+    SchemaRead<T, P>? read,
     SchemaWrite<T>? write,
     Map<String, Schema> relations = const {},
   }) :
