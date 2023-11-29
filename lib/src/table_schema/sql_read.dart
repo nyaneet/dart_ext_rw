@@ -11,8 +11,8 @@ class SqlRead<T extends SchemaEntry> implements SchemaRead {
   final String _database;
   final bool _keepAlive;
   final bool _debug;
-  final Sql Function(List<dynamic>? values) _fetchSqlBuilder;
-  final Map<String, T> _entries = {};
+  final Sql Function(List<dynamic>? values) _sqlBuilder;
+  final Map<T, Function> _entryFromFactories;
   Sql _sql = Sql(sql: '');
   ///
   ///
@@ -22,21 +22,23 @@ class SqlRead<T extends SchemaEntry> implements SchemaRead {
     required String database,
     bool keepAlive = false,
     bool debug = false,
-    required Sql Function(List<dynamic>? values) fetchSqlBuilder,
+    required Sql Function(List<dynamic>? values) sqlBuilder,
+    required Map<T, Function> entryFromFactories,
   }) :
     _address = address,
     _authToken = authToken,
     _database = database,
     _keepAlive = keepAlive,
     _debug = debug,
-    _fetchSqlBuilder = fetchSqlBuilder {
+    _sqlBuilder = sqlBuilder,
+    _entryFromFactories = entryFromFactories {
     _log = Log("$runtimeType");
   }
-  ///
-  ///
+  //
+  //
   @override
   Future<Result<List<T>, Failure>> fetch(params) {
-    _sql = _fetchSqlBuilder(params);
+    _sql = _sqlBuilder(params);
     return _fetchWith(_sql);
   }
   ///
@@ -59,20 +61,14 @@ class SqlRead<T extends SchemaEntry> implements SchemaRead {
           if (reply.hasError) {
             return Err<List<T>, Failure>(Failure(message: reply.error.message, stackTrace: StackTrace.current));
           } else {
-            _entries.clear();
+            final List<T> entries = [];
             final rows = reply.data;
             for (final row in rows) {
               final entry = _makeEntry(row);
-              if (_entries.containsKey(entry.key)) {
-                throw Failure(
-                  message: "$runtimeType.fetchWith | dublicated entry key: ${entry.key}", 
-                  stackTrace: StackTrace.current,
-                );
-              }
-              _entries[entry.key] = entry;
+              entries.add(entry);
             }
+            return Ok<List<T>, Failure>(entries);
           }
-          return Ok<List<T>, Failure>(_entries.values.toList());
         }(), 
         Err(:final error) => Err<List<T>, Failure>(error),
       };

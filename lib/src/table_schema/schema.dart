@@ -14,7 +14,7 @@ typedef SqlBuilder<T extends SchemaEntry> = Sql Function(Sql sql, T entry);
 class Schema<T extends SchemaEntry> {
   late final Log _log;
   final List<Field> _fields;
-  final Map<String, T> _entries = {};
+  Map<String, T> _entries = {};
   final SchemaRead<T, dynamic>? _read;
   final SchemaWrite<T>? _write;
   final Map<String, Schema> _relations;
@@ -61,7 +61,26 @@ class Schema<T extends SchemaEntry> {
     await fetchRelations();
     final read = _read;
     if (read != null) {
-      return read.fetch(params);
+      return read.fetch(params).then((result) {
+        return switch(result) {
+          Ok<List<T>, Failure>(:final value) => () {
+            _entries.clear();
+            for (final entry in value) {
+              if (_entries.containsKey(entry.key)) {
+                throw Failure(
+                  message: "$runtimeType.fetchWith | dublicated entry key: ${entry.key}", 
+                  stackTrace: StackTrace.current,
+                );
+              }
+              _entries[entry.key] = entry;
+            } 
+            return Ok<List<T>, Failure>(_entries.values.toList());
+          }(),
+          Err<List<T>, Failure>(:final error) => () {
+            return Err<List<T>, Failure>(error);
+          }(),
+        };
+      });
     }
     return Future.value(
       Err<List<T>, Failure>(Failure(
@@ -88,10 +107,19 @@ class Schema<T extends SchemaEntry> {
   Future<Result<void, Failure>> insert({T? entry}) {
     final write = _write;
     if (write != null) {
-      return write.insert(entry);
+      return write.insert(entry).then((result) {
+        return switch (result) {
+          Ok(:final value) => () {
+            final entry_ = value;
+            _entries[entry_.key] = entry_;
+            return const Ok<void, Failure>(null);
+          }(),
+          Err(:final error) => Err(error),
+        };
+      });
     }
     return Future.value(
-      Err<List<T>, Failure>(Failure(
+      Err(Failure(
         message: "$runtimeType.insert | write - not initialized", 
         stackTrace: StackTrace.current,
       )),
@@ -102,7 +130,12 @@ class Schema<T extends SchemaEntry> {
   Future<Result<void, Failure>> update(T entry) {
     final write = _write;
     if (write != null) {
-      return write.update(entry);
+      return write.update(entry).then((result) {
+        if (result is Ok) {
+          _entries[entry.key] = entry;
+        }
+        return result;
+      });
     }
     return Future.value(
       Err<List<T>, Failure>(Failure(
@@ -116,7 +149,12 @@ class Schema<T extends SchemaEntry> {
   Future<Result<void, Failure>> delete(T entry) {
     final write = _write;
     if (write != null) {
-      return write.delete(entry);
+      return write.delete(entry).then((result) {
+        if (result is Ok) {
+          _entries.remove(entry.key);
+        }
+        return result;
+      });
     }
     return Future.value(
       Err<List<T>, Failure>(Failure(
@@ -132,7 +170,7 @@ class Schema<T extends SchemaEntry> {
       if (field.relation.isNotEmpty) {
         switch (relation(field.relation.id)) {
           case Ok(:final value):
-            await value.refresh();
+            await value.fetch(null);
           case Err(:final error):
             _log.warning(".fetchRelations | relation '${field.relation}' - not found\n\terror: $error");
         }
