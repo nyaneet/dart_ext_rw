@@ -11,7 +11,7 @@ export 'src/sql/sql.dart';
 export 'src/table_schema/field_value.dart';
 export 'src/table_schema/field.dart';
 export 'src/table_schema/relation.dart';
-export 'src/table_schema/table_relations.dart';
+export 'src/table_schema/relation_shema.dart';
 export 'src/table_schema/schema_entry.dart';
 export 'src/table_schema/schema.dart';
 export 'src/table_schema/table_schema.dart';
