@@ -8,43 +8,43 @@ import 'package:hmi_core/hmi_core_result_new.dart';
 /// abstruction on the SQL table rows
 class RelationSchema<T extends SchemaEntry, P> implements Schema<T, P> {
   late final Log _log;
-  final TableSchema<T, P> _tableSchema;
-  final Map<String, TableSchema> _relations;
+  final TableSchemaAbstract<T, P> _schema;
+  final Map<String, TableSchemaAbstract> _relations;
   ///
   /// A collection of the SchameEntry, 
   /// abstruction on the SQL table rows
   /// - [keys] - list of table field names
   RelationSchema({
-    required TableSchema<T, P> tableSchema,
-    Map<String, TableSchema> relations = const {},
+    required TableSchemaAbstract<T, P> schema,
+    Map<String, TableSchemaAbstract> relations = const {},
   }) :
-    _tableSchema = tableSchema,
+    _schema = schema,
     _relations = relations {
       _log = Log("$runtimeType");
     }
   ///
   /// Returns a list of table field names
   List<Field> get fields {
-    return _tableSchema.fields;
+    return _schema.fields;
   }
   ///
   /// Returns a list of table field keys
   List<String> get keys {
-    return _tableSchema.keys;
+    return _schema.keys;
   }
   ///
   ///
-  List<T> get entries => _tableSchema.entries;
+  List<T> get entries => _schema.entries;
   ///
   /// Fetchs data with new sql built from [values]
   @override
   Future<Result<List<T>, Failure>> fetch(params) async {
     await fetchRelations();
-    return _tableSchema.fetch(params);
+    return _schema.fetch(params);
   }
   ///
   /// Returns relation Result<Scheme> if exists else Result<Failure>
-  Result<TableSchema, Failure> relation(String id) {
+  Result<TableSchemaAbstract, Failure> relation(String id) {
     final rel = _relations[id];
     if (rel != null) {
       return Ok(rel);
@@ -59,24 +59,24 @@ class RelationSchema<T extends SchemaEntry, P> implements Schema<T, P> {
   /// Inserts new entry into the table scheme
   @override
   Future<Result<void, Failure>> insert({T? entry}) {
-    return _tableSchema.insert(entry: entry);
+    return _schema.insert(entry: entry);
   }
   ///
   /// Updates entry of the table scheme
   @override
   Future<Result<void, Failure>> update(T entry) {
-    return _tableSchema.update(entry);
+    return _schema.update(entry);
   }
   ///
   /// Deletes entry of the table scheme
   @override
   Future<Result<void, Failure>> delete(T entry) {
-    return _tableSchema.delete(entry);
+    return _schema.delete(entry);
   }
   ///
   /// Fetchs data of the relation schemes only (with existing sql)
   Future<void> fetchRelations() async {
-    for (final field in _tableSchema.fields) {
+    for (final field in _schema.fields) {
       if (field.relation.isNotEmpty) {
         switch (relation(field.relation.id)) {
           case Ok(:final value):
