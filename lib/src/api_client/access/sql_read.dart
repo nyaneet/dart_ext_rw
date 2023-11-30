@@ -1,5 +1,5 @@
 import 'package:ext_rw/ext_rw.dart';
-import 'package:ext_rw/src/table_schema/sql_builder.dart';
+import 'package:ext_rw/src/api_client/access/sql_builder.dart';
 import 'package:hmi_core/hmi_core_failure.dart';
 import 'package:hmi_core/hmi_core_log.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';

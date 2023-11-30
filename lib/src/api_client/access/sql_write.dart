@@ -1,11 +1,11 @@
 import 'package:ext_rw/ext_rw.dart';
-import 'package:ext_rw/src/table_schema/sql_builder.dart';
+import 'package:ext_rw/src/api_client/access/sql_builder.dart';
 import 'package:hmi_core/hmi_core_failure.dart';
-// import 'package:hmi_core/hmi_core_log.dart';
+import 'package:hmi_core/hmi_core_log.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
 
 class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
-  // late final Log _log;
+  late final Log _log;
   final ApiAddress _address;
   final String _authToken;
   final String _database;
@@ -39,9 +39,9 @@ class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
     _updateSqlBuilder = updateSqlBuilder,
     _deleteSqlBuilder = deleteSqlBuilder,
     _entryFromFactories = entryFromFactories,
-    _entryEmptyFactories = entryEmptyFactories; // {
-  //   _log = Log("$runtimeType");
-  // }
+    _entryEmptyFactories = entryEmptyFactories {
+    _log = Log("$runtimeType");
+  }
   //
   //
   @override
