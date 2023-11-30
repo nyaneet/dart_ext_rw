@@ -3,9 +3,6 @@ import 'package:hmi_core/hmi_core_failure.dart';
 import 'package:hmi_core/hmi_core_log.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
 
-typedef SqlBuilder<T extends SchemaEntry> = Sql Function(Sql sql, T entry);
-
-
 ///
 /// A collection of the SchameEntry, 
 /// abstruction on the SQL table rows

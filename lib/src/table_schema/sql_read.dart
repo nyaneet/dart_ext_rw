@@ -1,4 +1,5 @@
 import 'package:ext_rw/ext_rw.dart';
+import 'package:ext_rw/src/table_schema/sql_builder.dart';
 import 'package:hmi_core/hmi_core_failure.dart';
 // import 'package:hmi_core/hmi_core_log.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
@@ -10,7 +11,7 @@ class SqlRead<T extends SchemaEntry, P> implements SchemaRead<T, P> {
   final String _database;
   final bool _keepAlive;
   final bool _debug;
-  final Sql Function(P params) _sqlBuilder;
+  final SqlBuilder _sqlBuilder;
   final Map<T, Function> _entryFromFactories;
   Sql _sql = Sql(sql: '');
   ///
@@ -21,7 +22,7 @@ class SqlRead<T extends SchemaEntry, P> implements SchemaRead<T, P> {
     required String database,
     bool keepAlive = false,
     bool debug = false,
-    required Sql Function(P params) sqlBuilder,
+    required SqlBuilder sqlBuilder,
     required Map<T, Function> entryFromFactories,
   }) :
     _address = address,
@@ -37,7 +38,7 @@ class SqlRead<T extends SchemaEntry, P> implements SchemaRead<T, P> {
   //
   @override
   Future<Result<List<T>, Failure>> fetch(params) {
-    _sql = _sqlBuilder(params);
+    _sql = _sqlBuilder(_sql, params);
     return _fetch(_sql);
   }
   ///
