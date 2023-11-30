@@ -3,7 +3,7 @@ import 'package:hmi_core/hmi_core_failure.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
 
 ///
-/// Abstraction on write data access
+/// An abstraction on write data access
 abstract interface class SchemaWrite<T extends SchemaEntry> {
   ///
   /// Empty instance implements SchemaRead
