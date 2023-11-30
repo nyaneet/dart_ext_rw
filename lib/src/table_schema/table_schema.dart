@@ -6,7 +6,7 @@ import 'package:hmi_core/hmi_core_result_new.dart';
 ///
 /// A collection of the SchameEntry, 
 /// abstruction on the SQL table rows
-class TableSchema<T extends SchemaEntry, P> implements Schema<T, P> {
+class TableSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T, P> {
   late final Log _log;
   final List<Field> _fields;
   final Map<String, T> _entries = {};
@@ -104,5 +104,25 @@ class TableSchema<T extends SchemaEntry, P> implements Schema<T, P> {
       }
       return result;
     });
+  }
+  //
+  //
+  @override
+  Future<Result<void, Failure>> fetchRelations() {
+    return Future.value(
+      Err(Failure(
+        message: '$runtimeType.fetchRelations | method does not exists', 
+        stackTrace: StackTrace.current,
+      )),
+    );
+  }
+  //
+  //
+  @override
+  Result<TableSchema<SchemaEntry, dynamic>, Failure> relation(String id) {
+    return Err(Failure(
+        message: '$runtimeType.relation | method does not exists', 
+        stackTrace: StackTrace.current,
+    ));
   }
 }
