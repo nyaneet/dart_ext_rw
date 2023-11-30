@@ -21,7 +21,7 @@ abstract interface class TableSchemaAbstract<T extends SchemaEntry, P> implement
   Future<Result<List<T>, Failure>> fetch(params);
   ///
   /// Returns relation Result<Scheme> if exists else Result<Failure>
-  Result<TableSchema, Failure> relation(String id);
+  Result<TableSchemaAbstract, Failure> relation(String id);
   ///
   /// Inserts new entry into the table scheme
   @override

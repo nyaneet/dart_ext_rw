@@ -6,7 +6,7 @@ import 'package:hmi_core/hmi_core_result_new.dart';
 ///
 /// A collection of the SchameEntry, 
 /// abstruction on the SQL table rows
-class RelationSchema<T extends SchemaEntry, P> implements Schema<T, P> {
+class RelationSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T, P> {
   late final Log _log;
   final TableSchemaAbstract<T, P> _schema;
   final Map<String, TableSchemaAbstract> _relations;
@@ -44,6 +44,7 @@ class RelationSchema<T extends SchemaEntry, P> implements Schema<T, P> {
   }
   ///
   /// Returns relation Result<Scheme> if exists else Result<Failure>
+  @override
   Result<TableSchemaAbstract, Failure> relation(String id) {
     final rel = _relations[id];
     if (rel != null) {
@@ -75,16 +76,24 @@ class RelationSchema<T extends SchemaEntry, P> implements Schema<T, P> {
   }
   ///
   /// Fetchs data of the relation schemes only (with existing sql)
-  Future<void> fetchRelations() async {
+  @override
+  Future<Result<void, Failure>> fetchRelations() async {
+    Result<void, Failure> result = const Ok(null);
     for (final field in _schema.fields) {
       if (field.relation.isNotEmpty) {
         switch (relation(field.relation.id)) {
           case Ok(:final value):
             await value.fetch(null);
           case Err(:final error):
-            _log.warning(".fetchRelations | relation '${field.relation}' - not found\n\terror: $error");
+            final message = "$runtimeType.fetchRelations | relation '${field.relation}' - not found\n\terror: $error";
+            _log.warning(message);
+            result = Err(Failure(
+              message: message, 
+              stackTrace: StackTrace.current,
+            ));
         }
       }
     }
+    return result;
   }
 }
