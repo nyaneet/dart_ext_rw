@@ -66,9 +66,11 @@ class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
         };
       });
     }
-    throw Failure(
-      message: "$runtimeType.insert | insertSqlBuilder is not initialized", 
-      stackTrace: StackTrace.current,
+    return Future.value(
+      Err(Failure(
+        message: "$runtimeType.insert | insertSqlBuilder is not initialized", 
+        stackTrace: StackTrace.current,
+      )),
     );
   }
   //
@@ -90,9 +92,11 @@ class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
         };
       });
     }
-    throw Failure(
-      message: "$runtimeType.update | updateSqlBuilder is not initialized", 
-      stackTrace: StackTrace.current,
+    return Future.value(
+      Err(Failure(
+        message: "$runtimeType.update | updateSqlBuilder is not initialized", 
+        stackTrace: StackTrace.current,
+      )),
     );
   }
   //
@@ -114,9 +118,11 @@ class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
         };
       });
     }
-    throw Failure(
-      message: "$runtimeType.update | updateSqlBuilder is not initialized", 
-      stackTrace: StackTrace.current,
+    return Future.value(
+      Err(Failure(
+        message: "$runtimeType.delete | deleteSqlBuilder is not initialized", 
+        stackTrace: StackTrace.current,
+      )),
     );
   }
   ///

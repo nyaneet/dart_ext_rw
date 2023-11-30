@@ -55,8 +55,7 @@ class SqlRead<T extends SchemaEntry, P> implements SchemaRead<T, P> {
     );
     return request.fetch().then((result) {
       return switch (result) {
-        Ok(:final value) => () {
-          final reply = value;
+        Ok(value :final reply) => () {
           if (reply.hasError) {
             return Err<List<T>, Failure>(Failure(message: reply.error.message, stackTrace: StackTrace.current));
           } else {

@@ -13,8 +13,8 @@ class Schema<T extends SchemaEntry, P> {
   late final Log _log;
   final List<Field> _fields;
   final Map<String, T> _entries = {};
-  final SchemaRead<T, P>? _read;
-  final SchemaWrite<T>? _write;
+  final SchemaRead<T, P> _read;
+  final SchemaWrite<T> _write;
   final Map<String, Schema> _relations;
   ///
   /// A collection of the SchameEntry, 
@@ -22,8 +22,8 @@ class Schema<T extends SchemaEntry, P> {
   /// - [keys] - list of table field names
   Schema({
     required List<Field> fields,
-    SchemaRead<T, P>? read,
-    SchemaWrite<T>? write,
+    SchemaRead<T, P> read = const SchemaRead.empty(),
+    SchemaWrite<T> write = const SchemaWrite.empty(),
     Map<String, Schema> relations = const {},
   }) :
     _fields = fields,
@@ -46,46 +46,30 @@ class Schema<T extends SchemaEntry, P> {
   ///
   List<T> get entries => _entries.values.toList();
   ///
-  /// Fetchs data with existing sql
-  // Future<Result<List<SchemaEntry>, Failure>> refresh() {
-  //   if (_sql.build().isEmpty) {
-  //     _sql = _fetchSqlBuilder([]);
-  // }
-  //   return fetchWith(_sql);
-  // }
-  ///
-  /// Fetchs data with new sql built from [values] calling fetchSqlBuilder(values)
+  /// Fetchs data with new sql built from [values]
   Future<Result<List<T>, Failure>> fetch(params) async {
     await fetchRelations();
     final read = _read;
-    if (read != null) {
-      return read.fetch(params).then((result) {
-        return switch(result) {
-          Ok<List<T>, Failure>(:final value) => () {
-            _entries.clear();
-            for (final entry in value) {
-              if (_entries.containsKey(entry.key)) {
-                throw Failure(
-                  message: "$runtimeType.fetchWith | dublicated entry key: ${entry.key}", 
-                  stackTrace: StackTrace.current,
-                );
-              }
-              _entries[entry.key] = entry;
-            } 
-            return Ok<List<T>, Failure>(_entries.values.toList());
-          }(),
-          Err<List<T>, Failure>(:final error) => () {
-            return Err<List<T>, Failure>(error);
-          }(),
-        };
-      });
-    }
-    return Future.value(
-      Err<List<T>, Failure>(Failure(
-        message: "$runtimeType.fetch | read - not initialized", 
-        stackTrace: StackTrace.current,
-      )),
-    );
+    return read.fetch(params).then((result) {
+      return switch(result) {
+        Ok<List<T>, Failure>(:final value) => () {
+          _entries.clear();
+          for (final entry in value) {
+            if (_entries.containsKey(entry.key)) {
+              throw Failure(
+                message: "$runtimeType.fetchWith | dublicated entry key: ${entry.key}", 
+                stackTrace: StackTrace.current,
+              );
+            }
+            _entries[entry.key] = entry;
+          } 
+          return Ok<List<T>, Failure>(_entries.values.toList());
+        }(),
+        Err<List<T>, Failure>(:final error) => () {
+          return Err<List<T>, Failure>(error);
+        }(),
+      };
+    });
   }
   ///
   /// Returns relation Result<Scheme> if exists else Result<Failure>
@@ -104,62 +88,38 @@ class Schema<T extends SchemaEntry, P> {
   /// Inserts new entry into the table scheme
   Future<Result<void, Failure>> insert({T? entry}) {
     final write = _write;
-    if (write != null) {
-      return write.insert(entry).then((result) {
-        return switch (result) {
-          Ok(:final value) => () {
-            final entry_ = value;
-            _entries[entry_.key] = entry_;
-            return const Ok<void, Failure>(null);
-          }(),
-          Err(:final error) => Err(error),
-        };
-      });
-    }
-    return Future.value(
-      Err(Failure(
-        message: "$runtimeType.insert | write - not initialized", 
-        stackTrace: StackTrace.current,
-      )),
-    );
+    return write.insert(entry).then((result) {
+      return switch (result) {
+        Ok(:final value) => () {
+          final entry_ = value;
+          _entries[entry_.key] = entry_;
+          return const Ok<void, Failure>(null);
+        }(),
+        Err(:final error) => Err(error),
+      };
+    });
   }
   ///
   /// Updates entry of the table scheme
   Future<Result<void, Failure>> update(T entry) {
     final write = _write;
-    if (write != null) {
-      return write.update(entry).then((result) {
-        if (result is Ok) {
-          _entries[entry.key] = entry;
-        }
-        return result;
-      });
-    }
-    return Future.value(
-      Err<List<T>, Failure>(Failure(
-        message: "$runtimeType.update | write - not initialized", 
-        stackTrace: StackTrace.current,
-      )),
-    );
+    return write.update(entry).then((result) {
+      if (result is Ok) {
+        _entries[entry.key] = entry;
+      }
+      return result;
+    });
   }
   ///
   /// Deletes entry of the table scheme
   Future<Result<void, Failure>> delete(T entry) {
     final write = _write;
-    if (write != null) {
-      return write.delete(entry).then((result) {
-        if (result is Ok) {
-          _entries.remove(entry.key);
-        }
-        return result;
-      });
-    }
-    return Future.value(
-      Err<List<T>, Failure>(Failure(
-        message: "$runtimeType.delete | write - not initialized", 
-        stackTrace: StackTrace.current,
-      )),
-    );
+    return write.delete(entry).then((result) {
+      if (result is Ok) {
+        _entries.remove(entry.key);
+      }
+      return result;
+    });
   }
   ///
   /// Fetchs data of the relation schemes only (with existing sql)
