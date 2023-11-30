@@ -28,7 +28,7 @@ class _SchemaWriteEmpty<T extends SchemaEntry> implements SchemaWrite<T> {
   //
   //
   @override
-  Future<Result<void, Failure>> delete(T entry) {
+  Future<Result<void, Failure>> delete(T _) {
     return Future.value(Err(Failure(
       message: "$runtimeType.delete | write - not initialized", 
       stackTrace: StackTrace.current,
@@ -37,7 +37,7 @@ class _SchemaWriteEmpty<T extends SchemaEntry> implements SchemaWrite<T> {
   //
   //
   @override
-  Future<Result<T, Failure>> insert(T? entry) {
+  Future<Result<T, Failure>> insert(T? _) {
     return Future.value(Err(Failure(
       message: "$runtimeType.insert | write - not initialized", 
       stackTrace: StackTrace.current,
@@ -46,7 +46,7 @@ class _SchemaWriteEmpty<T extends SchemaEntry> implements SchemaWrite<T> {
   //
   //
   @override
-  Future<Result<void, Failure>> update(T entry) {
+  Future<Result<void, Failure>> update(T _) {
     return Future.value(Err(Failure(
       message: "$runtimeType.update | write - not initialized", 
       stackTrace: StackTrace.current,

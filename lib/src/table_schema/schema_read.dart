@@ -22,7 +22,7 @@ class _SchemaReadEmpty<T extends SchemaEntry, P> implements SchemaRead<T, P> {
   //
   //
   @override
-  Future<Result<List<T>, Failure>> fetch(params) {
+  Future<Result<List<T>, Failure>> fetch(P _) {
     return Future.value(Err(Failure(
       message: "$runtimeType.fetch | read - not initialized", 
       stackTrace: StackTrace.current,
