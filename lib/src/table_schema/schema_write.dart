@@ -18,6 +18,7 @@ abstract interface class SchemaWrite<T extends SchemaEntry> {
   /// Deletes entry from the source
   Future<Result<void, Failure>> delete(T entry);
 }
+
 ///
 /// Empty instance implements SchemaRead
 class _SchemaWriteEmpty<T extends SchemaEntry> implements SchemaWrite<T> {
