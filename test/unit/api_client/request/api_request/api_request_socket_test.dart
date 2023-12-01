@@ -5,6 +5,21 @@ import 'package:ext_rw/ext_rw.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
 
+class FakeApiAddress implements ApiAddress {
+  final String _host;
+  final int _port;
+
+  FakeApiAddress({required String host, required int port})
+      : _host = host,
+        _port = port;
+
+  @override
+  String get host => _host;
+
+  @override
+  int get port => _port;
+}
+
 class FakeApiQueryType implements ApiQueryType {
   final bool _valid;
   final String _query;
@@ -32,7 +47,7 @@ class FakeApiQueryType implements ApiQueryType {
 
 void main() {
   group('ApiRequest socket', () {
-    late ApiAddress address;
+    late FakeApiAddress address;
     late ServerSocket serverSocket;
     setUp(() async {
       // bind socket server to unused port and start listening
@@ -46,7 +61,7 @@ void main() {
           socket.add(data);
         });
       });
-      address = ApiAddress(
+      address = FakeApiAddress(
         host: serverSocket.address.host,
         port: serverSocket.port,
       );
