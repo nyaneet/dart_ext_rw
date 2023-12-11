@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Field constructor', () {
     test('sets default values with only required parameters provided', () {
-      const key = '';
+      const key = 'key';
       const field = Field(key: key);
       expect(field.key, equals(key));
       expect(field.name, equals(key));
