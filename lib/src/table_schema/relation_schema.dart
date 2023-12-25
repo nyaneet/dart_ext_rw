@@ -24,16 +24,19 @@ class RelationSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T,
     }
   ///
   /// Returns a list of table field names
+  @override
   List<Field> get fields {
     return _schema.fields;
   }
   ///
   /// Returns a list of table field keys
+  @override
   List<String> get keys {
     return _schema.keys;
   }
   ///
   ///
+  @override
   List<T> get entries => _schema.entries;
   ///
   /// Fetchs data with new sql built from [values]

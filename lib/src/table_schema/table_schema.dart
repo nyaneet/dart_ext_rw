@@ -28,16 +28,19 @@ class TableSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T, P>
     }
   ///
   /// Returns a list of table field names
+  @override
   List<Field> get fields {
     return _fields;
   }
   ///
   /// Returns a list of table field keys
+  @override
   List<String> get keys {
     return _fields.map((field) => field.key).toList();
   }
   ///
   ///
+  @override
   List<T> get entries => _entries.values.toList();
   ///
   /// Fetchs data with new sql built from [values]
