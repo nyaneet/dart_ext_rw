@@ -19,11 +19,7 @@ class FakeApiQueryType implements ApiQueryType {
   bool valid() => _valid;
 
   @override
-  String buildJson() => _query;
-
-  // insert directly into _query in fake implementation
-  @override
-  String get authToken => '';
+  String buildJson({String authToken = '', bool debug = false}) => _query;
 
   // insert directly into _query in fake implementation
   @override
@@ -61,6 +57,7 @@ void main() {
       for (final query in queryList) {
         final apiRequest = ApiRequest(
           address: address,
+          authToken: '+++',
           query: FakeApiQueryType(
             valid: true,
             query: query,
@@ -90,6 +87,7 @@ void main() {
       for (final query in queryList) {
         final apiRequest = ApiRequest(
           address: address,
+          authToken: '+++',
           query: FakeApiQueryType(
             valid: false,
             query: query,
