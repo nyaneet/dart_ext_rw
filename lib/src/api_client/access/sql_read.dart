@@ -1,5 +1,4 @@
 import 'package:ext_rw/ext_rw.dart';
-import 'package:ext_rw/src/api_client/access/sql_builder.dart';
 import 'package:hmi_core/hmi_core_failure.dart';
 import 'package:hmi_core/hmi_core_log.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
@@ -46,14 +45,15 @@ class SqlRead<T extends SchemaEntry, P> implements SchemaRead<T, P> {
   Future<Result<List<T>, Failure>> _fetch(Sql sql) {
     final request = ApiRequest(
       address: _address, 
+      authToken: _authToken, 
+      debug: _debug,
       query: SqlQuery(
-        authToken: _authToken, 
         database: _database,
         sql: sql.build(),
         keepAlive: _keepAlive,
-        debug: _debug,
       ),
     );
+    _log.debug("._fetch | request: $request");
     return request.fetch().then((result) {
       return switch (result) {
         Ok(value :final reply) => () {

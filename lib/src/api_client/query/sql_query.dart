@@ -4,26 +4,20 @@ import 'package:ext_rw/src/api_client/query/api_query_type.dart';
 import 'package:uuid/uuid.dart';
 
 class SqlQuery implements ApiQueryType {
-  final String _authToken;
   late String _id;
   final String _database;
   final String _sql;
   final bool _keepAlive;
-  final bool _debug;
   ///
   /// Prapares sql for some database
   SqlQuery({
-    required String authToken,
     required String database,
     required String sql,
     bool keepAlive = false,
-    bool debug = false,
   }) :
-    _authToken = authToken,
     _database = database,
     _sql = sql,
-    _keepAlive = keepAlive,
-    _debug = debug;
+    _keepAlive = keepAlive;
   ///
   @override
   bool valid() {
@@ -32,13 +26,13 @@ class SqlQuery implements ApiQueryType {
   }
   ///
   @override
-  String buildJson() {
+  String buildJson({String authToken = '', bool debug = false}) {
     _id = const Uuid().v1();
     final jsonString = json.encode({
-      'authToken': _authToken,
+      'authToken': authToken,
       'id': _id,
       'keepAlive': _keepAlive,
-      'debug': _debug,
+      'debug': debug,
       'sql': {
         'database': _database,
         'sql': _sql,
@@ -46,9 +40,6 @@ class SqlQuery implements ApiQueryType {
     });
     return jsonString;
   }
-  ///
-  @override
-  String get authToken => _authToken;
   ///
   @override
   String get id => _id;
