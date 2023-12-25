@@ -1,9 +1,7 @@
 abstract class ApiQueryType {
   bool valid();
   ///
-  String buildJson();
-  ///
-  String get authToken;
+  String buildJson({String authToken = '', bool debug = false});
   ///
   String get id;
 }

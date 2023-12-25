@@ -45,6 +45,7 @@ class TableSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T, P>
   Future<Result<List<T>, Failure>> fetch(P params) async {
     final read = _read;
     return read.fetch(params).then((result) {
+      _log.debug('.fetch | result: $result');
       return switch(result) {
         Ok<List<T>, Failure>(:final value) => () {
           _entries.clear();
