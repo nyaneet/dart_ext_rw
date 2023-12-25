@@ -22,4 +22,7 @@ abstract class SchemaEntry {
   ///
   ///
   bool get isChanged;
+  ///
+  ///
+  bool get isSelected;
 }
