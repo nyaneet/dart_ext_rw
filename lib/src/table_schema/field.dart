@@ -37,4 +37,10 @@ class Field {
   ///
   ///
   Relation get relation => _relation;
+  //
+  //
+  @override
+  String toString() {
+    return '$runtimeType{ key: $_key, name: $_name, hidden: $_hidden, editable: $_edit, relation: $_relation }';
+  }
 }

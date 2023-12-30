@@ -5,7 +5,7 @@ import 'package:hmi_core/hmi_core_result_new.dart';
 ///
 /// A collection of the SchameEntry, 
 /// abstruction on the table rows
-abstract interface class TableSchemaAbstract<T extends SchemaEntry, P> implements Schema<T, P> {
+abstract interface class TableSchemaAbstract<T extends SchemaEntryAbstract, P> implements Schema<T, P> {
   ///
   /// Returns a list of table field names
   List<Field> get fields;
@@ -18,23 +18,23 @@ abstract interface class TableSchemaAbstract<T extends SchemaEntry, P> implement
   ///
   /// Fetchs data with new sql built from [values]
   @override
-  Future<Result<List<T>, Failure>> fetch(params);
+  Future<Result<List<T>, Failure>> fetch(P? params);
   ///
-  /// Returns relation Result<Scheme> if exists else Result<Failure>
+  /// Returns relation Result<schema> if exists else Result<Failure>
   Result<TableSchemaAbstract, Failure> relation(String id);
   ///
-  /// Inserts new entry into the table scheme
+  /// Inserts new entry into the table schema
   @override
   Future<Result<void, Failure>> insert({T? entry});
   ///
-  /// Updates entry of the table scheme
+  /// Updates entry of the table schema
   @override
   Future<Result<void, Failure>> update(T entry);
   ///
-  /// Deletes entry of the table scheme
+  /// Deletes entry of the table schema
   @override
   Future<Result<void, Failure>> delete(T entry);
   ///
-  /// Fetchs data of the relation schemes only (with existing sql)
+  /// Fetchs data of the relation schemas only (with existing sql)
   Future<Result<void, Failure>> fetchRelations();
 }

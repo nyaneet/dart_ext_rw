@@ -1,28 +1,28 @@
-import 'package:ext_rw/src/table_schema/schema_entry.dart';
+import 'package:ext_rw/ext_rw.dart';
 import 'package:hmi_core/hmi_core_failure.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
 
 ///
 /// An abstraction on read data access 
-abstract interface class SchemaRead<T extends SchemaEntry, P> {
+abstract interface class SchemaRead<T extends SchemaEntryAbstract, P> {
   ///
   /// Empty instance implements SchemaRead
   const factory SchemaRead.empty() = _SchemaReadEmpty;
   ///
   /// Fetchs entries with new sql built from [params]
-  Future<Result<List<T>, Failure>> fetch(P params);
+  Future<Result<List<T>, Failure>> fetch(P? params);
 }
 
 ///
 /// Empty instance implements SchemaRead
-class _SchemaReadEmpty<T extends SchemaEntry, P> implements SchemaRead<T, P> {
+class _SchemaReadEmpty<T extends SchemaEntryAbstract, P> implements SchemaRead<T, P> {
   ///
   ///
   const _SchemaReadEmpty();
   //
   //
   @override
-  Future<Result<List<T>, Failure>> fetch(P _) {
+  Future<Result<List<T>, Failure>> fetch(P? _) {
     return Future.value(Err(Failure(
       message: "$runtimeType.fetch | read - not initialized", 
       stackTrace: StackTrace.current,

@@ -6,7 +6,7 @@ import 'package:hmi_core/hmi_core_result_new.dart';
 ///
 /// A collection of the SchameEntry, 
 /// abstruction on the SQL table rows
-class TableSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T, P> {
+class TableSchema<T extends SchemaEntryAbstract, P> implements TableSchemaAbstract<T, P> {
   late final Log _log;
   final List<Field> _fields;
   final Map<String, T> _entries = {};
@@ -45,14 +45,15 @@ class TableSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T, P>
   ///
   /// Fetchs data with new sql built from [values]
   @override
-  Future<Result<List<T>, Failure>> fetch(P params) async {
-    final read = _read;
-    return read.fetch(params).then((result) {
+  Future<Result<List<T>, Failure>> fetch(P? params) async {
+    return _read.fetch(params).then((result) {
       _log.debug('.fetch | result: $result');
       return switch(result) {
-        Ok<List<T>, Failure>(:final value) => () {
+        Ok<List<T>, Failure>(value: final entries) => () {
+          _log.debug('.fetch | result rows: $entries');
           _entries.clear();
-          for (final entry in value) {
+          for (final entry in entries) {
+            _log.debug('.fetch | entry[${entry.key}]: $entry');
             if (_entries.containsKey(entry.key)) {
               throw Failure(
                 message: "$runtimeType.fetchWith | dublicated entry key: ${entry.key}", 
@@ -70,11 +71,10 @@ class TableSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T, P>
     });
   }
   ///
-  /// Inserts new entry into the table scheme
+  /// Inserts new entry into the table schema
   @override
   Future<Result<void, Failure>> insert({T? entry}) {
-    final write = _write;
-    return write.insert(entry).then((result) {
+    return _write.insert(entry).then((result) {
       return switch (result) {
         Ok(:final value) => () {
           final entry_ = value;
@@ -86,19 +86,19 @@ class TableSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T, P>
     });
   }
   ///
-  /// Updates entry of the table scheme
+  /// Updates entry of the table schema
   @override
   Future<Result<void, Failure>> update(T entry) {
-    final write = _write;
-    return write.update(entry).then((result) {
+    return _write.update(entry).then((result) {
       if (result is Ok) {
+        entry.saved();
         _entries[entry.key] = entry;
       }
       return result;
     });
   }
   ///
-  /// Deletes entry of the table scheme
+  /// Deletes entry of the table schema
   @override
   Future<Result<void, Failure>> delete(T entry) {
     final write = _write;

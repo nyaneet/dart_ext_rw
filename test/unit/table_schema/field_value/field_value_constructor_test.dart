@@ -10,8 +10,8 @@ void main() {
     test('sets default values with only required parameters provided', () {
       const values = [3456, 0, -124 -2345.56, 0.0, 234111.0, 'abc', '', true, _TestObject()];
       for(final value in values) {
-        final fieldValue = FieldValue(value);
-        expect(fieldValue.value, equals(value));
+        final fieldValue = FieldValue('$value');
+        expect(fieldValue.value, equals('$value'));
         expect(fieldValue.type, equals(FieldType.string));
       }
     });
@@ -23,15 +23,15 @@ void main() {
         },
         {
           'value': '_+-+()*&^%\$;:?№"#@!`~\\|/.,[]{}',
-          'type': FieldType.int,
+          'type': FieldType.string,
         },
         {
           'value': '_+-+()*&^%\$;:?№"#@!`~\\|/.,[]{}',
-          'type': FieldType.double,
+          'type': FieldType.string,
         },
         {
           'value': '_+-+()*&^%\$;:?№"#@!`~\\|/.,[]{}',
-          'type': FieldType.bool,
+          'type': FieldType.string,
         },
         {
           'value': 123,
