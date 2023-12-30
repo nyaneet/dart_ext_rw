@@ -1,28 +1,90 @@
 
 import 'package:ext_rw/src/table_schema/field_value.dart';
+import 'package:ext_rw/src/table_schema/schema_entry_abstract.dart';
+import 'package:hmi_core/hmi_core_failure.dart';
+import 'package:hmi_core/hmi_core_log.dart';
+import 'package:uuid/uuid.dart';
 
 ///
 /// abstruction on the SQL table single row
-abstract class SchemaEntry {
+class SchemaEntry implements SchemaEntryAbstract {
+  final _log = Log("$SchemaEntry");
+  final _id = const Uuid().v1();  // v1 time-based id
+  final Map<String, FieldValue> _map;
+  bool _isChanged =  false;
+  bool _isSelected = false;
+  ///
+  ///
+  SchemaEntry({
+    Map<String, FieldValue>? map,
+  }):
+    _map = map ?? const {};
   ///
   /// Creates entry from database row
-  SchemaEntry.from(Map<String, dynamic> row);
+  // SchemaEntry.from(Map<String, dynamic> row);
   ///
   /// Creates entry with empty / default values
-  SchemaEntry.empty();
+  SchemaEntry.empty(): _map = {};
   ///
   /// Returns inner unique identificator of the entry, not related to the database table
-  String get key;
+  @override
+  String get key => _id;
+  ///
+  ///
+  @override
+  bool get isChanged => _isChanged;
+  ///
+  /// Returns selection state
+  @override
+  bool get isSelected => _isSelected;
   ///
   /// Returns field value by field name [key]
-  FieldValue value(String key);
+  @override
+  FieldValue value(String key)  {
+    final value = _map[key];
+    if (value != null) {
+      return value;
+    }
+    throw Failure(
+      message: "$runtimeType.value | key '$key' - not found", 
+      stackTrace: StackTrace.current,
+    );
+  }
   ///
   /// Updates field value by field name [key]
-  void update(String key, String value);
+  @override
+  void update(String key, dynamic value) {
+    _log.debug('.update | key: $key, \t value: $value, \t valuetype: ${value.runtimeType}');
+    if (!_map.containsKey(key)) {
+      throw Failure(
+        message: "$runtimeType.update | key '$key' - not found", 
+        stackTrace: StackTrace.current,
+      );
+    }
+    final field = _map[key];
+    _log.debug('.update | key: $key, \t field: $field');
+    if (field != null) {
+      final changed = field.update(value);
+      _isChanged = _isChanged || changed;
+    }
+    _log.debug('.update | key: $key, \t field: $field, isChanged: $_isChanged');
+  }
   ///
+  /// Set selection state
+  @override
+  void select(bool selected) {
+    if (_isSelected != selected) _isSelected = selected;
+  }
   ///
-  bool get isChanged;
-  ///
-  ///
-  bool get isSelected;
+  /// Set isChanged to false
+  @override
+  void saved() {
+    _isChanged = false;
+  }
+  //
+  //
+  @override
+  String toString() {
+    return '$runtimeType{ isChanged: ${_isChanged}, isSelected: ${_isSelected}, map: $_map}';
+  }
 }

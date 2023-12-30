@@ -1,10 +1,10 @@
-import 'package:ext_rw/src/table_schema/schema_entry.dart';
+import 'package:ext_rw/ext_rw.dart';
 import 'package:hmi_core/hmi_core_failure.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
 
 ///
 /// An abstraction on write data access
-abstract interface class SchemaWrite<T extends SchemaEntry> {
+abstract interface class SchemaWrite<T extends SchemaEntryAbstract> {
   ///
   /// Empty instance implements SchemaRead
   const factory SchemaWrite.empty() = _SchemaWriteEmpty;
@@ -21,7 +21,7 @@ abstract interface class SchemaWrite<T extends SchemaEntry> {
 
 ///
 /// Empty instance implements SchemaRead
-class _SchemaWriteEmpty<T extends SchemaEntry> implements SchemaWrite<T> {
+class _SchemaWriteEmpty<T extends SchemaEntryAbstract> implements SchemaWrite<T> {
   ///
   ///
   const _SchemaWriteEmpty();

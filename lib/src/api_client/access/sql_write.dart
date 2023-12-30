@@ -3,7 +3,7 @@ import 'package:hmi_core/hmi_core_failure.dart';
 import 'package:hmi_core/hmi_core_log.dart';
 import 'package:hmi_core/hmi_core_result_new.dart';
 
-class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
+class SqlWrite<T extends SchemaEntryAbstract> implements SchemaWrite<T> {
   late final Log _log;
   final ApiAddress _address;
   final String _authToken;
@@ -13,8 +13,8 @@ class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
   final SqlBuilder<T>? _insertSqlBuilder;
   final SqlBuilder<T>? _updateSqlBuilder;
   final SqlBuilder<T>? _deleteSqlBuilder;
-  final Map<T, Function> _entryFromFactories;
-  final Map<T, Function> _entryEmptyFactories;
+  // final T Function(Map<String, dynamic> row) _entryFromFactories;
+  final T Function() _emptyEntryBuilder;
   ///
   ///
   SqlWrite({
@@ -26,8 +26,8 @@ class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
     SqlBuilder<T>? insertSqlBuilder,
     SqlBuilder<T>? updateSqlBuilder,
     SqlBuilder<T>? deleteSqlBuilder,
-    required Map<T, Function> entryFromFactories,
-    required Map<T, Function> entryEmptyFactories,
+    // required T Function(Map<String, dynamic> row) entryFromFactories,
+    required T Function() emptyEntryBuilder,
   }) :
     _address = address,
     _authToken = authToken,
@@ -37,8 +37,8 @@ class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
     _insertSqlBuilder = insertSqlBuilder,
     _updateSqlBuilder = updateSqlBuilder,
     _deleteSqlBuilder = deleteSqlBuilder,
-    _entryFromFactories = entryFromFactories,
-    _entryEmptyFactories = entryEmptyFactories {
+    // _entryFromFactories = entryFromFactories,
+    _emptyEntryBuilder = emptyEntryBuilder {
     _log = Log("$runtimeType");
   }
   //
@@ -49,7 +49,7 @@ class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
     if (entry != null) {
       entry_ = entry;
     } else {
-      entry_ = _makeEmptyEntry();
+      entry_ = _emptyEntryBuilder();
     }
     final builder = _insertSqlBuilder;
     if (builder != null) {
@@ -127,7 +127,7 @@ class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
   }
   ///
   /// Fetchs data with new [sql]
-  Future<Result<List<T>, Failure>> _fetchWith(Sql sql) {
+  Future<Result<void, Failure>> _fetchWith(Sql sql) {
     final request = ApiRequest(
       address: _address, 
       authToken: _authToken, 
@@ -144,44 +144,44 @@ class SqlWrite<T extends SchemaEntry> implements SchemaWrite<T> {
         Ok(:final value) => () {
           final reply = value;
           if (reply.hasError) {
-            return Err<List<T>, Failure>(Failure(message: reply.error.message, stackTrace: StackTrace.current));
+            return Err<void, Failure>(Failure(message: reply.error.message, stackTrace: StackTrace.current));
           } else {
-            final List<T> entries = [];
-            final rows = reply.data;
-            for (final row in rows) {
-              final entry = _makeEntry(row);
-              entries.add(entry);
-            }
-            return Ok<List<T>, Failure>(entries);
+            // final List<T> entries = [];
+            // final rows = reply.data;
+            // for (final row in rows) {
+            //   final entry = _makeEntry(row);
+            //   entries.add(entry);
+            // }
+            return const Ok<void, Failure>(null);
           }
         }(), 
-        Err(:final error) => Err<List<T>, Failure>(error),
+        Err(:final error) => Err<void, Failure>(error),
       };
     });
   }
-  ///
-  ///
-  T _makeEmptyEntry() {
-    final constructor = _entryEmptyFactories[T];
-    if (constructor != null) {
-      return constructor();
-    } else {
-      throw Failure(
-        message: "$runtimeType._makeEntry | Can't find constructor for $T", 
-        stackTrace: StackTrace.current,
-      );
-    }
-  }
-  ///
-  ///
-  T _makeEntry(Map<String, dynamic> row) {
-    final constructor = _entryFromFactories[T];
-    if (constructor != null) {
-      return constructor(row);
-    }
-    throw Failure(
-      message: "$runtimeType._makeEntry | Can't find constructor for $T", 
-      stackTrace: StackTrace.current,
-    );
-  }
+  // ///
+  // ///
+  // T _makeEmptyEntry() {
+  //   // final constructor = _entryEmptyFactories[T];
+  //   return _entryEmptyFactories();
+  //   // if (constructor != null) {
+  //   // } else {
+  //   //   throw Failure(
+  //   //     message: "$runtimeType._makeEntry | Can't find constructor for $T", 
+  //   //     stackTrace: StackTrace.current,
+  //   //   );
+  //   // }
+  // }
+  // ///
+  // ///
+  // T _makeEntry(Map<String, dynamic> row) {
+  //   return _entryFromFactories(row);
+  //   // final constructor = _entryFromFactories[T];
+  //   // if (_entryFromFactories != null) {
+  //   // }
+  //   // throw Failure(
+  //   //   message: "$runtimeType._makeEntry | Can't find constructor for $T", 
+  //   //   stackTrace: StackTrace.current,
+  //   // );
+  // }
 }

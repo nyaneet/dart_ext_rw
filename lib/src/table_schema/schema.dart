@@ -4,7 +4,7 @@ import 'package:hmi_core/hmi_core_result_new.dart';
 
 ///
 /// An abstruction on the data access
-abstract interface class Schema<T extends SchemaEntry, P> {
+abstract interface class Schema<T extends SchemaEntryAbstract, P> {
   ///
   /// Fetchs data from the data source using [params]
   Future<Result<List<T>, Failure>> fetch(P params);

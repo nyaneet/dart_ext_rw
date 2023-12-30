@@ -13,6 +13,7 @@ export 'src/table_schema/field.dart';
 export 'src/table_schema/relation.dart';
 export 'src/table_schema/relation_schema.dart';
 export 'src/table_schema/schema_entry.dart';
+export 'src/table_schema/schema_entry_abstract.dart';
 export 'src/table_schema/schema.dart';
 export 'src/table_schema/table_schema.dart';
 export 'src/table_schema/table_schema_abstract.dart';

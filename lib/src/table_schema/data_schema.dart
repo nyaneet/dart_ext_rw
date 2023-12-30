@@ -5,7 +5,7 @@ import 'package:hmi_core/hmi_core_result_new.dart';
 ///
 /// A collection of the SchameEntry, 
 /// abstruction on the SQL table rows
-class DataSchema<T extends SchemaEntry, P> implements Schema<T, P> {
+class DataSchema<T extends SchemaEntryAbstract, P> implements Schema<T, P> {
   final SchemaRead<T, P> _read;
   final SchemaWrite<T> _write;
   ///
@@ -26,21 +26,21 @@ class DataSchema<T extends SchemaEntry, P> implements Schema<T, P> {
     return read.fetch(params);
   }
   ///
-  /// Inserts new entry into the table scheme
+  /// Inserts new entry into the table schema
   @override
   Future<Result<void, Failure>> insert({T? entry}) {
     final write = _write;
     return write.insert(entry);
   }
   ///
-  /// Updates entry of the table scheme
+  /// Updates entry of the table schema
   @override
   Future<Result<void, Failure>> update(T entry) {
     final write = _write;
     return write.update(entry);
   }
   ///
-  /// Deletes entry of the table scheme
+  /// Deletes entry of the table schema
   @override
   Future<Result<void, Failure>> delete(T entry) {
     final write = _write;

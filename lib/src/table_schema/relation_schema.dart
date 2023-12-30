@@ -6,7 +6,7 @@ import 'package:hmi_core/hmi_core_result_new.dart';
 ///
 /// A collection of the SchameEntry, 
 /// abstruction on the SQL table rows
-class RelationSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T, P> {
+class RelationSchema<T extends SchemaEntryAbstract, P> implements TableSchemaAbstract<T, P> {
   late final Log _log;
   final TableSchemaAbstract<T, P> _schema;
   final Map<String, TableSchemaAbstract> _relations;
@@ -46,7 +46,7 @@ class RelationSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T,
     return _schema.fetch(params);
   }
   ///
-  /// Returns relation Result<Scheme> if exists else Result<Failure>
+  /// Returns relation Result<schema> if exists else Result<Failure>
   @override
   Result<TableSchemaAbstract, Failure> relation(String id) {
     final rel = _relations[id];
@@ -60,25 +60,25 @@ class RelationSchema<T extends SchemaEntry, P> implements TableSchemaAbstract<T,
     }
   }
   ///
-  /// Inserts new entry into the table scheme
+  /// Inserts new entry into the table schema
   @override
   Future<Result<void, Failure>> insert({T? entry}) {
     return _schema.insert(entry: entry);
   }
   ///
-  /// Updates entry of the table scheme
+  /// Updates entry of the table schema
   @override
   Future<Result<void, Failure>> update(T entry) {
     return _schema.update(entry);
   }
   ///
-  /// Deletes entry of the table scheme
+  /// Deletes entry of the table schema
   @override
   Future<Result<void, Failure>> delete(T entry) {
     return _schema.delete(entry);
   }
   ///
-  /// Fetchs data of the relation schemes only (with existing sql)
+  /// Fetchs data of the relation schemas only (with existing sql)
   @override
   Future<Result<void, Failure>> fetchRelations() async {
     Result<void, Failure> result = const Ok(null);
