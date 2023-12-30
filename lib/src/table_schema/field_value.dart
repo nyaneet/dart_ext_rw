@@ -68,7 +68,7 @@ class FieldValue<T> {
           _value = '$value' as T;
           return true;
         case FieldType.unknown:
-          _value = '$value' as T;
+          _value = value;
           return true;
       }
     }
