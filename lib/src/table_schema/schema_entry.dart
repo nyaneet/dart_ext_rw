@@ -85,6 +85,6 @@ class SchemaEntry implements SchemaEntryAbstract {
   //
   @override
   String toString() {
-    return '$runtimeType{ isChanged: ${_isChanged}, isSelected: ${_isSelected}, map: $_map}';
+    return '$runtimeType{ isChanged: $_isChanged, isSelected: $_isSelected, map: $_map}';
   }
 }
