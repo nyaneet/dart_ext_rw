@@ -46,7 +46,7 @@ class SqlAccess<T, P> {
   }
   //
   //
-  Future<Result<List<T>, Failure>> fetch(P? params, {bool? keepAlive}) {
+  Future<Result<List<T>, Failure>> fetch({P? params, bool? keepAlive}) {
     _sql = _sqlBuilder(_sql, params);
     return _fetch(_sql, keepAlive ?? _keepAlive);
   }
