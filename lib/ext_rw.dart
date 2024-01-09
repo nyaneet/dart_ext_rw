@@ -23,3 +23,4 @@ export 'src/table_schema/schema_write.dart';
 export 'src/api_client/access/sql_read.dart';
 export 'src/api_client/access/sql_write.dart';
 export 'src/api_client/access/sql_builder.dart';
+export 'src/api_client/access/sql_access.dart';

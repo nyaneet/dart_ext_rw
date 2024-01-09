@@ -33,11 +33,23 @@ class ApiRequest {
   ///
   String get authToken => _authToken;
   ///
-  /// sends created request to the remote
-  /// returns reply if exists
+  /// Sends created request to the remote
+  /// - returns reply if exists
   Future<Result<ApiReply, Failure>> fetch() async {
     final query = _query.buildJson(authToken: _authToken, debug: _debug);
     final bytes = utf8.encode(query);
+    if (kIsWeb) {
+      return _fetchWebSocket(bytes);
+    } else {
+      return _fetchSocket(bytes);
+    }
+  }
+  ///
+  /// Sends created request with new query to the remote
+  /// - returns reply if exists
+  Future<Result<ApiReply, Failure>> fetchWith(ApiQueryType query) async {
+    final queryJson = query.buildJson(authToken: _authToken, debug: _debug);
+    final bytes = utf8.encode(queryJson);
     if (kIsWeb) {
       return _fetchWebSocket(bytes);
     } else {
