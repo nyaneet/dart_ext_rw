@@ -11,7 +11,7 @@ class SqlAccess<T, P> {
   final bool _keepAlive;
   final bool _debug;
   final SqlBuilder<P?> _sqlBuilder;
-  final T Function(Map<String, dynamic> row) _entryBuilder;
+  final T Function(Map<String, dynamic> row)? _entryBuilder;
   late final ApiRequest _request;
   Sql _sql = Sql(sql: '');
   ///
@@ -23,7 +23,7 @@ class SqlAccess<T, P> {
     bool keepAlive = false,
     bool debug = false,
     required SqlBuilder<P?> sqlBuilder,
-    required T Function(Map<String, dynamic> row) entryBuilder,
+    T Function(Map<String, dynamic> row)? entryBuilder,
   }) :
     _address = address,
     _authToken = authToken,
@@ -59,6 +59,7 @@ class SqlAccess<T, P> {
       keepAlive: keepAlive,
     );
     _log.debug("._fetch | request: $query");
+    final entryBuilder = _entryBuilder ?? (dynamic _) {return null as T;};
     return _request.fetchWith(query).then((result) {
       return switch (result) {
         Ok(value :final reply) => () {
@@ -72,7 +73,7 @@ class SqlAccess<T, P> {
             _log.debug("._fetch | reply rows ($rowsLength): $rows");
             for (final row in rows) {
               _log.debug("._fetch | row: $row");
-              final entry = _entryBuilder(row);
+              final entry = entryBuilder(row);
               _log.debug("._fetch | entry: $entry");
               entries.add(entry);
             }
