@@ -1,6 +1,7 @@
 class FieldValue<T> {
   T _value;
   FieldType _type;
+  bool _isChanged = false;
   ///
   ///
   FieldValue(
@@ -54,6 +55,7 @@ class FieldValue<T> {
   /// Returns true if changed
   bool update(T value) {
     if (_value != value) {
+      _isChanged = true;
       switch (type) {
         case FieldType.bool:
           _value = value;
@@ -74,6 +76,9 @@ class FieldValue<T> {
     }
     return false;
   }
+  ///
+  /// Returns true if value was updated
+  bool get isChanged => _isChanged;
   //
   //
   @override

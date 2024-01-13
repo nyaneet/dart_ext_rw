@@ -34,6 +34,18 @@ class SchemaEntry implements SchemaEntryAbstract {
   @override
   bool get isChanged => _isChanged;
   ///
+  ///
+  bool isValueChanged(String key) {
+    final value = _map[key];
+    if (value != null) {
+      return value.isChanged;
+    }
+    throw Failure(
+      message: "$runtimeType.isValueChanged | key '$key' - not found", 
+      stackTrace: StackTrace.current,
+    );
+  }
+  ///
   /// Returns selection state
   @override
   bool get isSelected => _isSelected;
