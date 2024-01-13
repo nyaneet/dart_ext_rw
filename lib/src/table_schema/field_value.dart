@@ -16,8 +16,8 @@ class FieldValue<T> {
   ///
   /// Returns a string representation of the inner value
   String? get str {
-    if (_value == null) {
-      return null;
+    if (_value == null || '$_value'.toLowerCase() == 'null') {
+      return 'null';
     }
     switch (type) {
       case FieldType.bool:
@@ -33,7 +33,6 @@ class FieldValue<T> {
       // default:
     }
   }
-
   ///
   ///
   FieldType get type {
