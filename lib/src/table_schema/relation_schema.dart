@@ -45,8 +45,15 @@ class RelationSchema<T extends SchemaEntryAbstract, P> implements TableSchemaAbs
     await fetchRelations();
     return _schema.fetch(params);
   }
-  ///
-  /// Returns relation Result<schema> if exists else Result<Failure>
+  @override
+  Map<String, List<SchemaEntryAbstract>> get relations {
+    return _relations.map((key, scheme) {
+      final entries = scheme.entries;
+      return MapEntry(key, entries);
+    });
+  }
+  //
+  //
   @override
   Result<TableSchemaAbstract, Failure> relation(String id) {
     final rel = _relations[id];

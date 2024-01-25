@@ -123,6 +123,12 @@ class TableSchema<T extends SchemaEntryAbstract, P> implements TableSchemaAbstra
   //
   //
   @override
+  Map<String, List<SchemaEntryAbstract>> get relations {
+    return {};
+  }
+  //
+  //
+  @override
   Result<TableSchema<SchemaEntry, dynamic>, Failure> relation(String id) {
     return Err(Failure(
         message: '$runtimeType.relation | method does not exists', 
