@@ -10,6 +10,12 @@ class Field {
   final bool _edit;
   final Relation _relation;
   ///
+  /// **Represents table column settings**
+  /// - [name] - display name of the column, if null, the [key] will be displayed
+  /// - [key] 
+  ///   - database column name if not relation
+  ///   - relation key if this is relation column
+  /// - [relation] - represents column, related from another table, where from data will be gotten
   const Field({
     required String key,
     String? name,
