@@ -20,7 +20,7 @@ class Field {
     required String key,
     String? title,
     bool hidden = false,
-    bool editable = true,
+    bool editable = false,
     Relation? relation,
   }) :
     _key = key,
