@@ -11,7 +11,7 @@ class FieldValue<T> {
     _value = value,
     _type = type;
   ///
-  ///
+  /// Returns inner value as [T]
   T get value => _value;
   ///
   /// Returns a string representation of the inner value
