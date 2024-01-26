@@ -8,7 +8,7 @@ void main() {
       const key = 'key';
       const field = Field(key: key);
       expect(field.key, equals(key));
-      expect(field.name, equals(key));
+      expect(field.title, equals(key));
       expect(field.isHidden, equals(false));
       expect(field.isEditable, equals(true));
       expect(field.relation, equals(const Relation.empty()));
@@ -61,13 +61,13 @@ void main() {
         } = map;
         final field = Field(
           key: key as String,
-          name: name as String,
+          title: name as String,
           hidden: hidden as bool,
           editable: edit as bool,
           relation: relation as Relation,
         );
         expect(field.key, equals(key));
-        expect(field.name, equals(name));
+        expect(field.title, equals(name));
         expect(field.isHidden, equals(hidden));
         expect(field.isEditable, equals(edit));
         expect(field.relation, equals(relation));
