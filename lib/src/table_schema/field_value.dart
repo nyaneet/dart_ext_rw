@@ -57,12 +57,15 @@ class FieldValue<T> {
       _isChanged = true;
       switch (type) {
         case FieldType.bool:
+          // TODO Add type convertion
           _value = value;
           return true;
         case FieldType.int:
+          // TODO Add type convertion
           _value = value;
           return true;
         case FieldType.double:
+          // TODO Add type convertion
           _value = value;
           return true;
         case FieldType.string:
