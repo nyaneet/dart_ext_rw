@@ -23,7 +23,7 @@ class DataSchema<T extends SchemaEntryAbstract, P> implements Schema<T, P> {
   @override
   Future<Result<List<T>, Failure>> fetch(P params) async {
     final read = _read;
-    return read.fetch(params);
+    return read.fetch(params: params);
   }
   ///
   /// Inserts new entry into the table schema

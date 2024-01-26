@@ -46,7 +46,7 @@ class TableSchema<T extends SchemaEntryAbstract, P> implements TableSchemaAbstra
   /// Fetchs data with new sql built from [values]
   @override
   Future<Result<List<T>, Failure>> fetch(P? params) async {
-    return _read.fetch(params).then((result) {
+    return _read.fetch(params: params).then((result) {
       _log.debug('.fetch | result: $result');
       return switch(result) {
         Ok<List<T>, Failure>(value: final entries) => () {
