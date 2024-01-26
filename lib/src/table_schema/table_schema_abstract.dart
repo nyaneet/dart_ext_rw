@@ -7,13 +7,13 @@ import 'package:hmi_core/hmi_core_result_new.dart';
 /// abstruction on the table rows
 abstract interface class TableSchemaAbstract<T extends SchemaEntryAbstract, P> implements Schema<T, P> {
   ///
-  /// Returns a list of table field names
+  /// Returns a list of table fields
   List<Field> get fields;
   ///
   /// Returns a list of table field keys
   List<String> get keys;
   ///
-  ///
+  /// Returns table row's data
   List<T> get entries;
   ///
   /// Fetchs data with new sql built from [values]

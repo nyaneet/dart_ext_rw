@@ -9,8 +9,8 @@ void main() {
       const field = Field(key: key);
       expect(field.key, equals(key));
       expect(field.name, equals(key));
-      expect(field.hidden, equals(false));
-      expect(field.edit, equals(true));
+      expect(field.isHidden, equals(false));
+      expect(field.isEditable, equals(true));
       expect(field.relation, equals(const Relation.empty()));
     });
     test('sets provided values', () {
@@ -63,13 +63,13 @@ void main() {
           key: key as String,
           name: name as String,
           hidden: hidden as bool,
-          edit: edit as bool,
+          editable: edit as bool,
           relation: relation as Relation,
         );
         expect(field.key, equals(key));
         expect(field.name, equals(name));
-        expect(field.hidden, equals(hidden));
-        expect(field.edit, equals(edit));
+        expect(field.isHidden, equals(hidden));
+        expect(field.isEditable, equals(edit));
         expect(field.relation, equals(relation));
       }
     });

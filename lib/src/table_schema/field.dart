@@ -20,13 +20,13 @@ class Field {
     required String key,
     String? name,
     bool hidden = false,
-    bool edit = true,
+    bool editable = true,
     Relation? relation,
   }) :
     _key = key,
     _name = name ?? key,
     _hidden = hidden,
-    _edit = edit,
+    _edit = editable,
     _relation = relation ?? const Relation.empty();
   ///
   ///
@@ -36,10 +36,10 @@ class Field {
   String get name => _name;
   ///
   ///
-  bool get hidden => _hidden;
+  bool get isHidden => _hidden;
   ///
   ///
-  bool get edit => _edit;
+  bool get isEditable => _edit;
   ///
   ///
   Relation get relation => _relation;
