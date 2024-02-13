@@ -34,7 +34,7 @@ class ExecutableQuery implements ApiQueryType {
       'keepAlive': _keepAlive,
       'debug': debug,
       'executable': {
-        'script': _script,
+        'name': _script,
         'params': _params,
       },
     });
